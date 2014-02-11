@@ -32,6 +32,9 @@ group :doc do
   gem 'sdoc', require: false
 end
 
+# We want a Javascript runtime
+gem 'therubyracer'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.1.2'
 
@@ -43,3 +46,10 @@ end
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
+
+# Testing
+group :test do
+  gem 'cucumber-rails'
+  gem 'database_cleaner'
+  gem 'capybara'
+end
