@@ -46,5 +46,5 @@ Before that though, we're going to use Devise. Devise is a gem designed to setup
 
        rails g devise User
 
-There we go, devise user model created. Time to write more tests.
+There we go, devise user model created. Time to write more tests. Devise has created for us an outline of a spec, along with a factory_girl factory. Lets play with that factory first. 
 
