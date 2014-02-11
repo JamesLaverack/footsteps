@@ -44,6 +44,9 @@ end
 # Use debugger
 # gem 'debugger', group: [:development, :test]
 
+# Use devise
+gem 'devise'
+
 # Testing
 group :test, :development do
   gem 'cucumber-rails', :require => false
