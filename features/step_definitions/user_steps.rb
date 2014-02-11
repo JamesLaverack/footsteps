@@ -1,9 +1,13 @@
+def create_user
+    FactoryGirl.create(:user)
+end
+
 When(/^I look at the list of users$/) do
   visit path_to("/users")
 end
 
 Given(/^there is another user$/) do
-  pending
+  @other_user = create_user
 end
 
 Then(/^I should see that I am not following that user$/) do
@@ -30,19 +34,20 @@ Then(/^I should see that that user is not following me$/) do
   pending # express the regexp above with the code you wish you had
 end
 
-
 Given(/^There are users$/) do
-  pending # express the regexp above with the code you wish you had
+  10.times do @users << create_user end
 end
 
 Then(/^I should see all users$/) do
-  pending # express the regexp above with the code you wish you had
+  @users.each do |user|
+    page.should have_content(user.name)
+  end
 end
 
 Given(/^I exist as a user$/) do
-  pending # express the regexp above with the code you wish you had
+  @user = create_user
 end
 
 When(/^I look at my profile$/) do
-  pending # express the regexp above with the code you wish you had
+  visit path_to("/users/" + @user.id)
 end
