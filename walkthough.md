@@ -10,6 +10,8 @@ I've decided to go with a combination of Cucumber and RSpec. The former for 'ful
 
 I'll write the unit tests as I make controllers and models, but the cucumber tests I'll write now. Broadly speaking these tests describe the behaviour of the application. If the tests pass, the application works as we want it to in at least one case.
 
-So, after putting this innital state in git, I'll put the gem `cucumber-rails` along with `database_cleaner`, `therubyracer`, and `capybara` in my Gemfile under the test group and do a `bundle install` to get it insalled. The second of those gems does what it says on the tin and we'll also be using it with RSpec later. Therubyracer is a javascript runtime we'll need to test any JS we might include (and compile any coffeescript that might be used later) and capybara works together with Cucumber to make testing our site as if we are a user really easy. Finally, a quick `rails g cucumber:install` and we're ready to go.
+So, after putting this innital state in git, I'll put the gem `cucumber-rails` along with `database_cleaner`, `therubyracer`, `factory_girl_rails`, and `capybara` in my Gemfile under the test group and do a `bundle install` to get it insalled.
+
+The second of those gems does what it says on the tin and we'll also be using it with RSpec later. Therubyracer is a javascript runtime we'll need to test any JS we might include (and compile any coffeescript that might be used later), capybara works together with Cucumber to make testing our site as if we are a user really easy, and factory-gril makes forming default data nice and simple. Finally, a quick `rails g cucumber:install` and we're ready to go.
 
 The first step in writing cucumber tests is to write the features, these are written in a domain spesific language called Gherkin. We can treat it as plain-text-but-not-quite though. 
