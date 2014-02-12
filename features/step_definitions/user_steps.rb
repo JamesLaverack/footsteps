@@ -90,10 +90,18 @@ When(/^I sign up with an invalid email$/) do
   sign_up(attrs)
 end
 
+When(/^I sign up with an invalid name$/) do
+  pending # express the regexp above with the code you wish you had
+end
+
 Then(/^I should see a successful sign up message$/) do
   pending # express the regexp above with the code you wish you had
 end
 
 Then(/^I should see a failure about my email$/) do
+  pending # express the regexp above with the code you wish you had
+end
+
+Then(/^I should see a failure about my name$/) do
   pending # express the regexp above with the code you wish you had
 end
