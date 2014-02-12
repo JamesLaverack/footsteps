@@ -53,6 +53,12 @@ Next I need to write the spec tests for the User model. This did end up being ex
 
 That's not to say it's a copy-paste job of course. In particular I have not used the test for accepting valid emails. This is mostly because I feel this is tested anyway when we try to create a valid instance given a valid set of attriubes from factory girl. Another change is actually using factory girl to produce default data. This means that everywhere in testing we reffer to factory girl to get example data.
 
-Another strange consideration here is that we're, in a way, testing the same thing twice. In both Cucumber and RSpec we test a valid and invalid email address. The reason is we're testing different things. In RSpec we test that the model considers that invalid. In cucumber we test that this invalid state is communicated to the user.
+Another strange consideration here is that we're, in a way, testing the same thing twice. In both Cucumber and RSpec we test a valid and invalid email address. The reason is we're testing different things. In RSpec we test that the model considers that invalid. In cucumber we test that this invalid state is communicated to the user. I've also chosen to ommit tests that were just testing the functionality of Devise. Testing our framework is unnessicary.
 
-I've also chosen to ommit tests that were just testing the functionality of Devise. Testing our framework is unnessicary.
+So, if we now run `rake cucumber` and `rake spec` we see that every single test fails. This is because our factory produces a set of default attributes with a name. The default user model has no idea what a name is and so errors instantly. Now it's time to actually begin writing the application that we have the tests to tell us doesn't work.
+
+   rails g migration AddNameToUsers name:string
+
+We can get rails to do that for us too though. A quick `rake db:migrate` later and RSpec now passes. Our model is fine. Cucumber however shows us a problem. Some things fail, we would expect this at this stage. However some things fail that I didn't expect.
+
+As it happens, Faker has known issues working inside Cucumber. After some more thought, I also came to the conclusion that randomisation inside a test is a bad idea. Better to have something repeatable for sure. So I removed faker, and put in static data. I simply assigned different static data in a test when I needed it.
