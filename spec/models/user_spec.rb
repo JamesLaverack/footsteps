@@ -27,8 +27,8 @@ describe User do
 
   it "should reject duplicate email addresses" do
     User.create!(@attr)
-    attr2 = FactoryGirl.attributes_for(:user)
-    attr2.merge(:email => @attr[:email])
+    attr2 = @attr
+    attr2.merge(:name => "James Blogs")
     duplicate_email = User.new(attr2)
     duplicate_email.should_not be_valid
   end
@@ -36,15 +36,15 @@ describe User do
   it "should reject duplicate email addresses though case" do
     User.create!(@attr)
     attr2 = @attr
-    attr2.merge(:email => @attr[:email].upcase)
+    attr2.merge(:name => "James Blogs", :email => @attr[:email].upcase)
     duplicate_email = User.new(attr2)
     duplicate_email.should_not be_valid
   end
 
  it "should reject duplicate names" do
     User.create!(@attr)
-    attr2 = FactoryGirl.attributes_for(:user)
-    attr2.merge(:name => @attr[:name])
+    attr2 = @attr
+    attr2.merge(:email => "joe.blogs@webmail.com")
     duplicate_email = User.new(attr2)
     duplicate_email.should_not be_valid
   end
@@ -52,7 +52,7 @@ describe User do
   it "should reject duplicate email addresses though case" do
     User.create!(@attr)
     attr2 = @attr
-    attr2.merge(:name => @attr[:name].upcase)
+    attr2.merge(:name => @attr[:name].upcase, :email => "joe.blogs@webmail.com")
     duplicate_email = User.new(attr2)
     duplicate_email.should_not be_valid
   end

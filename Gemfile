@@ -53,6 +53,5 @@ group :test, :development do
   gem 'database_cleaner'
   gem 'capybara'
   gem 'factory_girl_rails'
-  gem 'faker'
   gem 'rspec-rails'
 end

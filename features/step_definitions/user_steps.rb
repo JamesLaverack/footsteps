@@ -1,6 +1,8 @@
-def create_user
-  user = FactoryGirl.create(:user)
-  @users >> user
+def record_user(user)
+  if not defined? @users
+    @users = Array.new
+  end
+  @users << user
   return user
 end
 
@@ -17,8 +19,17 @@ When(/^I look at the list of users$/) do
   visit "/users"
 end
 
+Given(/^I exist as a user$/) do
+  @user = FactoryGirl.create(:user)
+  record_user(@user)
+end
+
 Given(/^there is another user$/) do
-  @other_user = create_user
+  @other_user = FactoryGirl.build(:user)
+  @other_user[:name] = "James Blogs"
+  @other_user[:email] = "james@blogs.com"
+  @other_user.save
+  record_user(@other_user)
 end
 
 Then(/^I should see that I am not following that user$/) do
@@ -55,9 +66,6 @@ Then(/^I should see all users$/) do
   end
 end
 
-Given(/^I exist as a user$/) do
-  @user = create_user
-end
 
 When(/^I look at my profile$/) do
   visit "/users/" + @user.id
