@@ -1,5 +1,6 @@
 #Introduction
-I started by doing research, seeing how the commmon problems presented are solved, from this and what I knew before I decided on what gems to use to help me. The main one being Devise, but I'll get to that when building the user model itself.
+I started by doing research, seeing how the commmon problems presented are solved, from this and what I knew before I decided on what gems to use to help me. The main one being Devise, but I'll get to that when building the user model itself. I tend to use a lot of Google to solve problems and find best practice, of particular note is the rails3-devise-rspec-cucumber tutorial on RailsApps. This was purely a 'best practices' referance. Not a template I built from.
+
 To begin with it's mostly houskeeping. Create a new RVM gemset against Ruby 2.1.0 and install the latest rails, getting version 4.0.2. After that I need to just create the rails app.
 
    rails new footsteps -T
@@ -46,5 +47,12 @@ Before that though, we're going to use Devise. Devise is a gem designed to setup
 
        rails g devise User
 
-There we go, devise user model created. Time to write more tests. Devise has created for us an outline of a spec, along with a factory_girl factory. Lets play with that factory first. 
+There we go, devise user model created. Time to write more tests. Devise has created for us an outline of a spec, along with a factory_girl factory. Lets play with that factory first. I'll modify it to generate a random name and email using Faker, a gem designed to spit out random names and email addresses. (Yes, there is a chance we could collide with an already generated one, but that's highly unlikely and I'll ofically worry about it later. For now, just run tests again if they fail because of a suspicious looking error about already existing users.)
 
+Next I need to write the spec tests for the User model. This did end up being extermely strongly based on the example user spec from the tutorial I mentioned earlier. Another case of why do something when someone's already written it. The tests given there were not completely correct for our case however. This is certinally the most sagnificant case of lifting from the internet in this challange.
+
+That's not to say it's a copy-paste job of course. In particular I have not used the test for accepting valid emails. This is mostly because I feel this is tested anyway when we try to create a valid instance given a valid set of attriubes from factory girl. Another change is actually using factory girl to produce default data. This means that everywhere in testing we reffer to factory girl to get example data.
+
+Another strange consideration here is that we're, in a way, testing the same thing twice. In both Cucumber and RSpec we test a valid and invalid email address. The reason is we're testing different things. In RSpec we test that the model considers that invalid. In cucumber we test that this invalid state is communicated to the user.
+
+I've also chosen to ommit tests that were just testing the functionality of Devise. Testing our framework is unnessicary.
