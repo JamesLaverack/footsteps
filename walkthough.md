@@ -35,7 +35,7 @@ This is all talking about the user, so let's make a feature for looking at a use
 
 I've decided to make it unique too. This is so it's easier to tell users apart. Some arbitary ID number isn't very membirable, and it's bad form for a website to give out email addresses, so users require some way of telling two users with the same name appart. The simpilist solution is to enforce unique names. Another option would be some kind of identifier, like grabbing the gravitar avitar for the email and always displaying that next to the name, but that's also not gauranteed to be unique.
 
-So, back to cucumber. We have some tests for viewing things. We also need to test creating users, logging in and logging out. We do this in `features/user/user_signup.feature` and `features/user/user_login.feature`.
+So, back to cucumber. We have some tests for viewing things. We also need to test creating users, logging in and logging out. We do this in `features/user/user_signup.feature` and `features/user/user_login.feature`. Each cucumber feature should be in as plain english as possible, with minimal clutter. For example, it's preffered to say "Given I exist as a user" than "Given a user named James with email james@example.com exists".
 
 Now that we have some tests we can start to implement them. We're going to need to setup factory_girl, and for that we're going to need to setup rspec so we can generate the spec directory. So we add the 'rspec-rails' gem, and another `bundle install` later we're golden. Once we've run `rails g rspec:install` anyway. For now though, we can't generate factories until we have a model.
 
@@ -62,3 +62,22 @@ So, if we now run `rake cucumber` and `rake spec` we see that every single test 
 We can get rails to do that for us too though. A quick `rake db:migrate` later and RSpec now passes. Our model is fine. Cucumber however shows us a problem. Some things fail, we would expect this at this stage. However some things fail that I didn't expect.
 
 As it happens, Faker has known issues working inside Cucumber. After some more thought, I also came to the conclusion that randomisation inside a test is a bad idea. Better to have something repeatable for sure. So I removed faker, and put in static data. I simply assigned different static data in a test when I needed it.
+
+So, now my specs still pass and cucumber fails as I expect it to. A handful of specs that don't make sense yet (the code for following someone) are unimplemented, and a handful of code about logging in fails. What is going on? Well, it turns out I've messesd up my routes.rb file. I've told it to route root to `welcome#index`, but no controller named welcome exists. Time to fix that.
+
+    rails g controller Welcome index
+
+Another rails generator command and a bunch more cucumber scenarios pass. This has also written a blank controller and view spec. We don't need view specs as we're using Cucumber, and the controller spec already contains the only testing we care about - that it responds to the index action.
+
+For now lets look at the next failure. This time we can't find the name field on the sign up form to input data into. So, without a name it should be impossible to create a user. If I run the rails server, and go plug in an email and a password it should fail as the user model requires a name, our spec tells us so right?
+
+Turns out I'd made a mistake there too. I'd written that particular test incorrectly, so it was giving a false pass. A quick re-write and check of my other tests and I now have a failing spec. So lets fix that before anything else. We need the user model to require the presense of the name field. So it's time to open up `app/models/user.rb` and write some code.
+
+We have three spec failures. Rejecting duplicate names, requiring a name, and rejecting a duplicate name given a different case. What we need is an ActiveRecord validation to assert these values of existance and uniqeness. After setting those in the model our spec passes again, this time actually correctly.
+
+Back to cucumber, we still have the problem of no name field on the signup form. Currently we're using devise's built in controller and view to render the user intraction code. It's time to modify that.
+
+
+
+
+
