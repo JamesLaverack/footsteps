@@ -1,8 +1,12 @@
 Footsteps::Application.routes.draw do
+  get "users/index"
   get "welcome/index"
   devise_for :users
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
+
+  # Use a custom controler to do users index
+  resources :users, :only => [:index]
 
   # You can have the root of your site routed with "root"
   root 'welcome#index'
