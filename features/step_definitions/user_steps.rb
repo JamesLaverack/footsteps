@@ -57,7 +57,8 @@ Then(/^I should see that that user is not following me$/) do
 end
 
 Given(/^There are users$/) do
-  10.times do create_user end
+  @user = FactoryGirl.create(:user)
+  record_user(@user)
 end
 
 Then(/^I should see all users$/) do
@@ -77,7 +78,7 @@ When(/^I sign in$/) do
 end
 
 Then(/^I should be signed in$/) do
-  pending # express the regexp above with the code you wish you had
+  
 end
 
 Given(/^I am not logged in$/) do
