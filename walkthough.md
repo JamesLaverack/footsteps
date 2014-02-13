@@ -77,7 +77,12 @@ We have three spec failures. Rejecting duplicate names, requiring a name, and re
 
 Back to cucumber, we still have the problem of no name field on the signup form. Currently we're using devise's built in controller and view to render the user intraction code. It's time to modify that.
 
+     rails g devise:views
 
+With that we now have all of the Devise views, ready to customise. In particular we're interested in the view "app/views/devise/registrations/new.html.erb". We can add the name field in here. We need to modify the controller too, to do that we add a filter in 'app/controllers/application_controller.rb', adding to the list of parameters that the users controller will pass though to the model.
 
+After adding a register and sign in button to the layout, that change to a sign out button when signed in, I can write the validations to detect if we are signed in or not. Then we've got everything we need to make accounts and sign in. Helpfully, cucumber agrees, the sign up feature passing completely.
 
+After a little bit of bugfixing here and there (as it happens, if you do FactoryGirl.create(:user), you can't ask the resulting object what it's password is. It's almost like we don't store a plaintext password at the model level!) with the tests and the application we have signing up, signing in and signing out working. It's time to tackle the index action.
 
+By default, Devise does not support an indexing action to list all of the users, but we require it and our cucumber test for it is failing. So lets add that next.

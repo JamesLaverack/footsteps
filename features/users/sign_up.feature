@@ -13,7 +13,3 @@ Feature: Sign up
 	Scenario: User singns up with invalid email
 		When I sign up with an invalid email
 		Then I should see a failure about my email
-
-	Scenario: User singns up with invalid name
-		When I sign up with an invalid name
-		Then I should see a failure about my name

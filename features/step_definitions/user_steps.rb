@@ -11,7 +11,7 @@ def sign_up(attrs)
   fill_in "Name", :with => attrs[:name]
   fill_in "Email", :with => attrs[:email]
   fill_in "Password", :with => attrs[:password]
-  fill_in "Password confirmation", :with => attr[:password]
+  fill_in "Password confirmation", :with => attrs[:password]
   click_button "Sign up"
 end
 
@@ -63,22 +63,25 @@ end
 
 Then(/^I should see all users$/) do
   @users.each do |user|
-    page.should have_content(user.name)
+    page.should have_content user.name
   end
 end
-
 
 When(/^I look at my profile$/) do
   visit "/users/" + @user.id
 end
 
 When(/^I sign in$/) do
-  visit '/'
-  
+  attrs = FactoryGirl.attributes_for(:user)
+  visit '/users/sign_in'
+  fill_in "Email", :with => attrs[:email]
+  fill_in "Password", :with => attrs[:password]
+  click_button "Sign in"
 end
 
 Then(/^I should be signed in$/) do
-  
+  visit '/'
+  page.should have_content "Sign out"
 end
 
 Given(/^I am not logged in$/) do
@@ -95,22 +98,14 @@ end
 
 When(/^I sign up with an invalid email$/) do
   attrs = FactoryGirl.attributes_for(:user)
-  attrs[:email] = ""
+  attrs[:email] = "bob"
   sign_up(attrs)
 end
 
-When(/^I sign up with an invalid name$/) do
-  pending # express the regexp above with the code you wish you had
-end
-
 Then(/^I should see a successful sign up message$/) do
-  pending # express the regexp above with the code you wish you had
+  page.should have_content "signed up"
 end
 
 Then(/^I should see a failure about my email$/) do
-  pending # express the regexp above with the code you wish you had
-end
-
-Then(/^I should see a failure about my name$/) do
-  pending # express the regexp above with the code you wish you had
+  page.should have_content "Email is invalid"
 end
