@@ -68,7 +68,7 @@ Then(/^I should see all users$/) do
 end
 
 When(/^I look at my profile$/) do
-  visit "/users/" + @user.id
+  visit "/users/" + @user.id.to_s
 end
 
 When(/^I sign in$/) do
