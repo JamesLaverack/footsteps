@@ -2,14 +2,35 @@
 
 Hi there, my name is <%= @user[:name] %>.
 
-<div id="following">
+<Div id="following">
 <h2>Following</h2>
 <% if @follows.nil? %>
 <p>You are not following anyone.</p>
 <% else %>
 <ul>
 <% [*@follows].each do |user| %>
-<li><%= user[:name] %> <%= link_to "Profile", user %></li>
+<li><%= user[:name] %> <%= link_to "Profile", user %>
+  <% if user_signed_in? %>
+  <%= link_to "unfollow", follow %>
+  <% end %>
+</li>
+<% end %>
+</ul>
+<% end %>
+</div>
+
+<div id="not-following">
+<h2>Not Following</h2>
+<% if @notfollows.nil? %>
+<p>You are following everyone.</p>
+<% else %>
+<ul>
+<% [*@notfollows].each do |user| %>
+<li><%= user[:name] %> <%= link_to "Profile", user %>
+  <% if user_signed_in? %>
+  <%= link_to "follow", follow %>
+  <% end %>
+</li>
 <% end %>
 </ul>
 <% end %>

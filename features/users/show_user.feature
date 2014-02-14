@@ -32,6 +32,7 @@ Feature: Show Users
 	 Given I exist as a user
 	 And there is another user
 	 And I am following that user
+	 And I am signed in
 	 When I look at my profile
 	 And I click "unfollow"
 	 And I look at my profile
@@ -40,6 +41,7 @@ Feature: Show Users
 	 Scenario: Following someone
 	 Given I exist as a user
 	 And there is another user
+	 And I am signed in
 	 When I look at my profile
 	 And I click "follow"
 	 And I look at my profile

@@ -8,16 +8,16 @@ describe Follow do
   end
 
   it "should reject not having a from field" do
-    no_to = Follow.new(:to => @user2[:id])
+    no_to = Follow.new(:to => @user2)
     no_to.should_not be_valid
   end
 
   it "should reject not having a to field" do
-    no_from = Follow.new(:from => @user1[:id])
+    no_from = Follow.new(:from => @user1)
     no_from.should_not be_valid
   end
 
   it "should create a relation between two users" do
-    follow = Follow.new(:from => @user1[:id], :to => @user2[:id])
+    follow = Follow.new(:from => @user1, :to => @user2)
   end
 end

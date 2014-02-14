@@ -15,6 +15,13 @@ def sign_up(attrs)
   click_button "Sign up"
 end
 
+def sign_in(attrs)
+  visit '/users/sign_in'
+  fill_in "Email", :with => attrs[:email]
+  fill_in "Password", :with => attrs[:password]
+  click_button "Sign in"
+end
+
 When(/^I look at the list of users$/) do
   visit "/users"
 end
@@ -34,10 +41,12 @@ end
 
 Then(/^I should see that I am not following that user$/) do
   find('#following').should_not have_content(@other_user[:name])
+  find('#not-following').should have_content(@other_user[:name])
 end
 
 Then(/^I should see that I am following that user$/) do
-  find('#following').should_not have_content(@other_user[:name])
+  find('#following').should have_content(@other_user[:name])
+  find('#not-following').should_not have_content(@other_user[:name])
 end
 
 Then(/^I should see that user following me$/) do
@@ -49,11 +58,11 @@ Then(/^I should see that that user is not following me$/) do
 end
 
 Given(/^I am following that user$/) do
-  FactoryGirl.create(:follow, :from => @user[:id], :to => @other_user[:id])
+  FactoryGirl.create(:follow, :from => @user, :to => @other_user)
 end
 
 Given(/^that user is following me$/) do
-  FactoryGirl.create(:follow, :from => @other_user[:id], :to => @user[:id])
+  FactoryGirl.create(:follow, :from => @other_user, :to => @user)
 end
 
 Given(/^There are users$/) do
@@ -72,11 +81,7 @@ When(/^I look at my profile$/) do
 end
 
 When(/^I sign in$/) do
-  attrs = FactoryGirl.attributes_for(:user)
-  visit '/users/sign_in'
-  fill_in "Email", :with => attrs[:email]
-  fill_in "Password", :with => attrs[:password]
-  click_button "Sign in"
+  sign_in(FactoryGirl.attributes_for(:user))
 end
 
 Then(/^I should be signed in$/) do
@@ -108,4 +113,8 @@ end
 
 Then(/^I should see a failure about my email$/) do
   page.should have_content "Email is invalid"
+end
+ 
+Given(/^I am signed in$/) do
+  sign_in(FactoryGirl.attributes_for(:user))
 end

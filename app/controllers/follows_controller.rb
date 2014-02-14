@@ -1,6 +1,7 @@
 class FollowsController < ApplicationController
   before_action :set_follow, only: [:show, :edit, :update, :destroy]
 
+
   # POST /follows
   # POST /follows.json
   def create
