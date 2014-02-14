@@ -2,3 +2,28 @@
 
 Hi there, my name is <%= @user[:name] %>.
 
+<div id="following">
+<h2>Following</h2>
+<% if @follows.nil? %>
+<p>You are not following anyone.</p>
+<% else %>
+<ul>
+<% [*@follows].each do |user| %>
+<li><%= user[:name] %> <%= link_to "Profile", user %></li>
+<% end %>
+</ul>
+<% end %>
+</div>
+
+<div id="followers">
+<h2>Followers</h2>
+<% if @followers.nil? %>
+<p>You have no followers.</p>
+<% else %>
+<ul>
+<% [*@followers].each do |user| %>
+<li><%= user[:name] %> <%= link_to "Profile", user %></li>
+<% end %>
+</ul>
+<% end %>
+</div>

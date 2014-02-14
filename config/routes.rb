@@ -1,4 +1,6 @@
 Footsteps::Application.routes.draw do
+  resources :follows, :only => [:create, :destroy]
+
   get "users/index"
   get "welcome/index"
   devise_for :users

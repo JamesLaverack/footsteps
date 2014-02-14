@@ -79,7 +79,7 @@ Back to cucumber, we still have the problem of no name field on the signup form.
 
      rails g devise:views
 
-With that we now have all of the Devise views, ready to customise. In particular we're interested in the view "app/views/devise/registrations/new.html.erb". We can add the name field in here. We need to modify the controller too, to do that we add a filter in 'app/controllers/application_controller.rb', adding to the list of parameters that the users controller will pass though to the model.
+With that we now have all of the Devise views, ready to customise. In particular we're interested in the view "app/views/devise/registrations/new.html.erb". We can add the name field in here. We need to modify the controller too, to do that we add a filter in 'app/controllers/application_controller.rb', adding to the list of parameters that the uusers controller will pass though to the model.
 
 After adding a register and sign in button to the layout, that change to a sign out button when signed in, I can write the validations to detect if we are signed in or not. Then we've got everything we need to make accounts and sign in. Helpfully, cucumber agrees, the sign up feature passing completely.
 
@@ -101,4 +101,8 @@ Now we have a profile page it's fine to finish writing the cucumber tests. I've 
 
 We need our second model now, a follow model.
 
-   rails g model Follow from:User to:User
+   rails g scaffold Follow from:referances to:referances
+
+I use a scaffold this time as I want a controller too, but I don't care about views so I'll delete those straight away along with their tests. I'll change the controler to expose only the :create and :delete actions, and restrict the routes so they are the only ones exposed. After updating the controller boilerplate spec to only test those two actions I run it only to find a lot of errors.
+
+As it turns out, using the references datatype will stick an "_id" on the end of the column name. Normally what I want, but not in this case. After writing a rename migration and applying that everything is fine. Spec is now passing. We have also added a test case for the follows model spec, that both fields exist.
