@@ -8,6 +8,8 @@ Footsteps::Application.routes.draw do
   # Use a custom controler to do users index
   resources :users, :only => [:index]
 
+  get '/users/:id' => 'users#show', :as => :user
+
   # You can have the root of your site routed with "root"
   root 'welcome#index'
 

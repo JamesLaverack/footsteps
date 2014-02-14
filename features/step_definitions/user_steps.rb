@@ -33,27 +33,27 @@ Given(/^there is another user$/) do
 end
 
 Then(/^I should see that I am not following that user$/) do
-  pending # express the regexp above with the code you wish you had
-end
-
-Given(/^I am following that user$/) do
-  pending # express the regexp above with the code you wish you had
+  find('#following').should_not have_content(@other_user[:name])
 end
 
 Then(/^I should see that I am following that user$/) do
-  pending # express the regexp above with the code you wish you had
-end
-
-Given(/^that user is following me$/) do
-  pending # express the regexp above with the code you wish you had
+  find('#following').should_not have_content(@other_user[:name])
 end
 
 Then(/^I should see that user following me$/) do
-  pending # express the regexp above with the code you wish you had
+  find('#followers').should have_content(@other_user[:name])
 end
 
 Then(/^I should see that that user is not following me$/) do
-  pending # express the regexp above with the code you wish you had
+  find('#followers').should_not have_content(@other_user[:name])
+end
+
+Given(/^I am following that user$/) do
+  FactoryGirl.create(:follow, :from => @user[:id], :to => @other_user[:id])
+end
+
+Given(/^that user is following me$/) do
+  FactoryGirl.create(:follow, :from => @other_user[:id], :to => @user[:id])
 end
 
 Given(/^There are users$/) do
