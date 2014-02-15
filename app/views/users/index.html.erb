@@ -5,3 +5,10 @@
 <% end %>
 </ui>
 
+<h2>DEBUG: Relations</h2>
+</ui>
+<% @follows.each do |follow| %>
+<li><%= follow[:from] %> follows <%= follow[:to] %></li>
+<% end %>
+</ui>
+

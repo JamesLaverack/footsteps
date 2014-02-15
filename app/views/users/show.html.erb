@@ -2,6 +2,14 @@
 
 Hi there, my name is <%= @user[:name] %>.
 
+<% if user_signed_in? and @user[:id] != current_user[:id] %>
+<% if Follow.find_by(:from => current_user, :to => @user) %>
+<%= link_to "unfollow", unfollow_path(:id => @user[:id]), :method => :post %>
+<% else %>
+<%= link_to "follow", follow_path(:id => @user[:id]), :method => :post %>
+<% end %>
+<% end %>
+
 <Div id="following">
 <h2>Following</h2>
 <% if @follows.nil? %>
@@ -11,7 +19,7 @@ Hi there, my name is <%= @user[:name] %>.
 <% [*@follows].each do |user| %>
 <li><%= user[:name] %> <%= link_to "Profile", user %>
   <% if user_signed_in? %>
-  <%= link_to "unfollow", follow %>
+  <%= link_to "Unfollow", unfollow_path(:id => user[:id]), :method => :post %>
   <% end %>
 </li>
 <% end %>
@@ -28,7 +36,7 @@ Hi there, my name is <%= @user[:name] %>.
 <% [*@notfollows].each do |user| %>
 <li><%= user[:name] %> <%= link_to "Profile", user %>
   <% if user_signed_in? %>
-  <%= link_to "follow", follow %>
+  <%= link_to "Follow", follow_path(:id => user[:id]), :method => :post %>
   <% end %>
 </li>
 <% end %>

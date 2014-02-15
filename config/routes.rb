@@ -10,7 +10,8 @@ Footsteps::Application.routes.draw do
   resources :users, :only => [:index]
 
   get '/users/:id' => 'users#show', :as => :user
-  get '/users/follow' => 'users#follow', :as => :follow, :via => [:post]
+  match '/users/follow' => 'users#follow', :as => :follow, :via => [:post]
+  match '/users/unfollow' => 'users#unfollow', :as => :unfollow, :via => [:post]
 
   # You can have the root of your site routed with "root"
   root 'welcome#index'

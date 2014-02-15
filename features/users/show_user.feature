@@ -34,16 +34,16 @@ Feature: Show Users
 	 And I am following that user
 	 And I am signed in
 	 When I look at my profile
-	 And I click "unfollow"
+	 And I click "Unfollow"
 	 And I look at my profile
-	 Then I should see that that user is not following me
+	 Then I should see that I am not following that user
 
 	 Scenario: Following someone
 	 Given I exist as a user
 	 And there is another user
 	 And I am signed in
 	 When I look at my profile
-	 And I click "follow"
+	 And I click "Follow"
 	 And I look at my profile
 	 Then I should see that I am following that user
 	 

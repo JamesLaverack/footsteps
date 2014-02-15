@@ -2,6 +2,10 @@ require 'spec_helper'
 
 describe UsersController do
 
+  before :each do
+    sign_out :user
+  end
+
   describe "GET 'index'" do
     it "returns http success" do
       get 'index'
@@ -20,16 +24,16 @@ describe UsersController do
   describe "POST 'follow'" do
     it "returns http success" do
       user = FactoryGirl.create(:user)
-      get 'follow', { :id => user[:id] }
-      response.should be_success
+      post 'follow', { :id => user[:id] }
+      response.should be_redirect
     end
   end
 
   describe "POST 'unfollow'" do
     it "returns http success" do
       user = FactoryGirl.create(:user)
-      get 'unfollow', { :id => user[:id] }
-      response.should be_success
+      post 'unfollow', { :id => user[:id] }
+      response.should be_redirect
     end
   end
 

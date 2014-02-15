@@ -39,4 +39,10 @@ RSpec.configure do |config|
   # the seed, which is printed after each run.
   #     --seed 1234
   config.order = "random"
+
+  # When using Devise with RSpec we want access to some helper methods. However
+  # we *don't* want these when testing a model, which has no concept of signing
+  # in or out. So we only enable them for testing controllers. (As we're using
+  # cucumber, we don't test views with RSpec.)
+  config.include Devise::TestHelpers, :type => :controller
 end
