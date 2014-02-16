@@ -6,8 +6,8 @@ class User < ActiveRecord::Base
 
   validates :name, :uniqueness => { case_sensitive: false }, :presence => true
 
-  has_many :follows_from, :foreign_key => "from", :class_name => "Follow"
-  has_many :follows_to, :foreign_key => "to", :class_name => "Follow"
+  has_many :follows_from, :foreign_key => "from_id", :class_name => "Follow"
+  has_many :follows_to, :foreign_key => "to_id", :class_name => "Follow"
   has_many :followed, :through => :follows_from, :source => "to"
   has_many :followers, :through => :follows_to, :source => "from"
 end

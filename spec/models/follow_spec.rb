@@ -19,6 +19,7 @@ describe Follow do
 
   it "should create a relation between two users" do
     follow = Follow.new(:from => @user1, :to => @user2)
+    follow.should be_valid
   end
 
   it "should reject duplicate follows" do

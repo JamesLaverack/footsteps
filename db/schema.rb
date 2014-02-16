@@ -11,11 +11,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140214014607) do
+ActiveRecord::Schema.define(version: 20140214005331) do
 
   create_table "follows", force: true do |t|
-    t.integer  "from"
-    t.integer  "to"
+    t.integer  "from_id"
+    t.integer  "to_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
