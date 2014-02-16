@@ -20,4 +20,15 @@ describe Follow do
   it "should create a relation between two users" do
     follow = Follow.new(:from => @user1, :to => @user2)
   end
+
+  it "should reject duplicate follows" do
+    Follow.create!(:from => @user1, :to => @user2)
+    duplicate_follow = Follow.new(:from => @user1, :to => @user2)
+    duplicate_follow.should_not be_valid
+  end
+
+  it "should reject a user following themselves" do
+    self_follow = Follow.new(:from => @user1, :to => @user1)
+    self_follow.should_not be_valid
+  end
 end
