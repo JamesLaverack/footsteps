@@ -2,7 +2,6 @@ class UsersController < ApplicationController
  
   def index
     @users = User.all
-    @follows = Follow.all
   end
 
   def show
