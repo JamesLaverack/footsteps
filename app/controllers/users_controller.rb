@@ -34,7 +34,7 @@ class UsersController < ApplicationController
   def unfollow
     if user_signed_in?
       other_user = User.find_by :id => params[:id]
-      @f = Follow.find_by(:from => current_user, :to => other_user[:id])
+      @f = Follow.find_by(:from => current_user, :to => other_user)
       @f.destroy
       #Follow.destroy_all :from => current_user, :to => other_user
       flash[:notice] = "User '" + other_user[:name].to_s + "' unfollowed."
