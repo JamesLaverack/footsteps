@@ -119,4 +119,4 @@ I wrote a test for both of these cases in my user Model and verified that they b
 
 A problem came during my implementation however. The follow model has two fields, a :from and a :to. Previously for ease of use I overrode the rails defaults to use :from and :to as the actual database column names rather than :from_id and :to_id. However, once I started trying to add validations using them I encountered problems. The base isuee was my code getting confused between when I meant the database column, which is an integer id, and an actual object of type User. In the end I reverted the migration and rewrote the code to use the default column names of :from_id and :to_id. It started working straight away.
 
-The second 
+The second bug required a simple custom validator that does a simple comparison between the from and to fields of a Follow, setting an error if they are equal.

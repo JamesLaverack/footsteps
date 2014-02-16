@@ -7,4 +7,13 @@ class Follow < ActiveRecord::Base
   validates :to, :presence => true
   
   validates :from, :uniqueness => { :scope => :to }, :allow_nil => true
+
+  validate :cannot_follow_yourself
+
+  def cannot_follow_yourself
+    if from == to
+      errors.add :to, 'You cannot follow yourself'
+    end
+  end
+
 end
