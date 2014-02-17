@@ -3,7 +3,7 @@ I started by doing research, seeing how the common problems presented are solved
 
 To begin with it's mostly housekeeping. Create a new RVM gemset against Ruby 2.1.0 and install the latest rails, getting version 4.0.2. After that I need to just create the rails app.
 
-   rails new footsteps -T
+      rails new footsteps -T
 
 I'm using the `-T` flag to not generate test files. This sounds dumb, but I've decided to use a different set of testing tools. This brings me nicely onto the subject. Before creating a single model I need to write some tests.
 
@@ -57,7 +57,7 @@ Another strange consideration here is that we're, in a way, testing the same thi
 
 So, if we now run `rake cucumber` and `rake spec` we see that every single test fails. This is because our factory produces a set of default attributes with a name. The default user model has no idea what a name is and so errors instantly. Now it's time to actually begin writing the application that we have the tests to tell us doesn't work.
 
-   rails g migration AddNameToUsers name:string
+      rails g migration AddNameToUsers name:string
 
 We can get rails to do that for us too though. A quick `rake db:migrate` later and RSpec now passes. Our model is fine. Cucumber however shows us a problem. Some things fail, we would expect this at this stage. However some things fail that I didn't expect.
 
@@ -87,7 +87,7 @@ After a little bit of bugfixing here and there (as it happens, if you do Factory
 
 By default, Devise does not support an indexing action to list all of the users, but we require it and our cucumber test for it is failing. So lets add that next.
 
-   rails g controller Users index
+      rails g controller Users index
 
 This will create the Users controller with the index action. Then we just update the action to assign a list of all users, the view to list all of their names, and the routes file to assign this to `/users/index`. The auto generated rspec test (that validates the index action produces a result) is sufficient as there is a cucumber test for listing all users. Which starts passing with no extra changes, success.
 
@@ -101,7 +101,7 @@ Now we have a profile page it's fine to finish writing the cucumber tests. I've 
 
 We need our second model now, a follow model.
 
-   rails g scaffold Follow from:referances to:referances
+      rails g scaffold Follow from:referances to:referances
 
 I use a scaffold this time as I want a controller too, but I don't care about views so I'll delete those straight away along with their tests. I'll change the controller to expose only the :create and :delete actions, and restrict the routes so they are the only ones exposed. After updating the controller boilerplate spec to only test those two actions I run it only to find a lot of errors.
 
