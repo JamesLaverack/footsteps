@@ -1,21 +1,21 @@
 #Introduction
-I started by doing research, seeing how the commmon problems presented are solved, from this and what I knew before I decided on what gems to use to help me. The main one being Devise, but I'll get to that when building the user model itself. I tend to use a lot of Google to solve problems and find best practice, of particular note is the rails3-devise-rspec-cucumber tutorial on RailsApps. This was purely a 'best practices' referance. Not a template I built from.
+I started by doing research, seeing how the common problems presented are solved, from this and what I knew before I decided on what gems to use to help me. The main one being Devise, but I'll get to that when building the user model itself. I tend to use a lot of Google to solve problems and find best practice, of particular note is the rails3-devise-rspec-cucumber tutorial on RailsApps. This was purely a 'best practises' reference. Not a template I built from.
 
-To begin with it's mostly houskeeping. Create a new RVM gemset against Ruby 2.1.0 and install the latest rails, getting version 4.0.2. After that I need to just create the rails app.
+To begin with it's mostly housekeeping. Create a new RVM gemset against Ruby 2.1.0 and install the latest rails, getting version 4.0.2. After that I need to just create the rails app.
 
    rails new footsteps -T
 
 I'm using the `-T` flag to not generate test files. This sounds dumb, but I've decided to use a different set of testing tools. This brings me nicely onto the subject. Before creating a single model I need to write some tests.
 
-I've decided to go with a combination of Cucumber and RSpec. The former for 'full-stack' interation testing, that is testing that the enitre application works as expected from a user's point of view. The latter is for unit testing, ensuring that individual components have tests.
+I've decided to go with a combination of Cucumber and RSpec. The former for 'full-stack' integration testing, that is testing that the entire application works as expected from a user's point of view. The latter is for unit testing, ensuring that individual components have tests.
 
 I'll write the unit tests as I make controllers and models, but the cucumber tests I'll write now. Broadly speaking these tests describe the behaviour of the application. If the tests pass, the application works as we want it to in at least one case.
 
-So, after putting this innital state in git, I'll put the gem `cucumber-rails` along with `database_cleaner`, `factory_girl_rails`, and `capybara` in my Gemfile under the test group and do a `bundle install` to get it insalled.
+So, after putting this innital state in git, I'll put the gem `cucumber-rails` along with `database_cleaner`, `factory_girl_rails`, and `capybara` in my Gemfile under the test group and do a `bundle install` to get it installed.
 
 The second of those gems does what it says on the tin and we'll also be using it with RSpec later. Capybara works together with Cucumber to make testing our site as if we are a user really easy, and factory-girl makes forming default data nice and simple. Finally, a quick `rails g cucumber:install` and we're ready to go.
 
-The first step in writing cucumber tests is to write the features, these are written in a domain spesific language called Gherkin. We can treat it as plain-text-but-not-quite though. Conveniantly enough the task email specifies, in plain text, how the application should behave.
+The first step in writing cucumber tests is to write the features, these are written in a domain specific language called Gherkin. We can treat it as plain-text-but-not-quite though. Conveniently enough the task email specifies, in plain text, how the application should behave.
 
     1) Create a simple Rails 4 application.
 
@@ -33,9 +33,9 @@ The first step in writing cucumber tests is to write the features, these are wri
 
 This is all talking about the user, so let's make a feature for looking at a user in `features/user/user_show.feature`. Here is also the point where I have to start making design decisions about the model, so I know how I can test it. I know that a user will have a name, an email, and a password. The email address should be unique as it's what the user uses to login, but should the name?
 
-I've decided to make it unique too. This is so it's easier to tell users apart. Some arbitary ID number isn't very membirable, and it's bad form for a website to give out email addresses, so users require some way of telling two users with the same name appart. The simpilist solution is to enforce unique names. Another option would be some kind of identifier, like grabbing the gravitar avitar for the email and always displaying that next to the name, but that's also not gauranteed to be unique.
+I've decided to make it unique too. This is so it's easier to tell users apart. Some arbitrary ID number isn't very memorable, and it's bad form for a website to give out email addresses, so users require some way of telling two users with the same name apart. The simpilist solution is to enforce unique names. Another option would be some kind of identifier, like grabbing the gravitar avatar for the email and always displaying that next to the name, but that's also not guaranteed to be unique.
 
-So, back to cucumber. We have some tests for viewing things. We also need to test creating users, logging in and logging out. We do this in `features/user/user_signup.feature` and `features/user/user_login.feature`. Each cucumber feature should be in as plain english as possible, with minimal clutter. For example, it's preffered to say "Given I exist as a user" than "Given a user named James with email james@example.com exists".
+So, back to cucumber. We have some tests for viewing things. We also need to test creating users, logging in and logging out. We do this in `features/user/user_signup.feature` and `features/user/user_login.feature`. Each cucumber feature should be in as plain english as possible, with minimal clutter. For example, it's preferred to say "Given I exist as a user" than "Given a user named James with email james@example.com exists".
 
 Now that we have some tests we can start to implement them. We're going to need to setup factory_girl, and for that we're going to need to setup rspec so we can generate the spec directory. So we add the 'rspec-rails' gem, and another `bundle install` later we're golden. Once we've run `rails g rspec:install` anyway. For now though, we can't generate factories until we have a model.
 
@@ -47,13 +47,13 @@ Before that though, we're going to use Devise. Devise is a gem designed to setup
 
        rails g devise User
 
-There we go, devise user model created. Time to write more tests. Devise has created for us an outline of a spec, along with a factory_girl factory. Lets play with that factory first. I'll modify it to generate a random name and email using Faker, a gem designed to spit out random names and email addresses. (Yes, there is a chance we could collide with an already generated one, but that's highly unlikely and I'll ofically worry about it later. For now, just run tests again if they fail because of a suspicious looking error about already existing users.)
+There we go, devise user model created. Time to write more tests. Devise has created for us an outline of a spec, along with a factory_girl factory. Lets play with that factory first. I'll modify it to generate a random name and email using Faker, a gem designed to spit out random names and email addresses. (Yes, there is a chance we could collide with an already generated one, but that's highly unlikely and I'll officially worry about it later. For now, just run tests again if they fail because of a suspicious looking error about already existing users.)
 
-Next I need to write the spec tests for the User model. This did end up being extermely strongly based on the example user spec from the tutorial I mentioned earlier. Another case of why do something when someone's already written it. The tests given there were not completely correct for our case however. This is certinally the most sagnificant case of lifting from the internet in this challange.
+Next I need to write the spec tests for the User model. This did end up being extremely strongly based on the example user spec from the tutorial I mentioned earlier. Another case of why do something when someones already written it. The tests given there were not completely correct for our case however. This is certainly the most significant case of lifting from the Internet in this challenge. Although they did get edited as I went along.
 
-That's not to say it's a copy-paste job of course. In particular I have not used the test for accepting valid emails. This is mostly because I feel this is tested anyway when we try to create a valid instance given a valid set of attriubes from factory girl. Another change is actually using factory girl to produce default data. This means that everywhere in testing we reffer to factory girl to get example data.
+That's not to say it's a copy-paste job of course. In particular I have not used the test for accepting valid emails. This is mostly because I feel this is tested anyway when we try to create a valid instance given a valid set of attributes from factory girl. Another change is actually using factory girl to produce default data. This means that everywhere in testing we reffer to factory girl to get example data.
 
-Another strange consideration here is that we're, in a way, testing the same thing twice. In both Cucumber and RSpec we test a valid and invalid email address. The reason is we're testing different things. In RSpec we test that the model considers that invalid. In cucumber we test that this invalid state is communicated to the user. I've also chosen to ommit tests that were just testing the functionality of Devise. Testing our framework is unnessicary.
+Another strange consideration here is that we're, in a way, testing the same thing twice. In both Cucumber and RSpec we test a valid and invalid email address. The reason is we're testing different things. In RSpec we test that the model considers that invalid. In cucumber we test that this invalid state is communicated to the user. I've also chosen to omit tests that were just testing the functionality of Devise. Testing our framework is unnecessary.
 
 So, if we now run `rake cucumber` and `rake spec` we see that every single test fails. This is because our factory produces a set of default attributes with a name. The default user model has no idea what a name is and so errors instantly. Now it's time to actually begin writing the application that we have the tests to tell us doesn't work.
 
@@ -63,7 +63,7 @@ We can get rails to do that for us too though. A quick `rake db:migrate` later a
 
 As it happens, Faker has known issues working inside Cucumber. After some more thought, I also came to the conclusion that randomisation inside a test is a bad idea. Better to have something repeatable for sure. So I removed faker, and put in static data. I simply assigned different static data in a test when I needed it.
 
-So, now my specs still pass and cucumber fails as I expect it to. A handful of specs that don't make sense yet (the code for following someone) are unimplemented, and a handful of code about logging in fails. What is going on? Well, it turns out I've messesd up my routes.rb file. I've told it to route root to `welcome#index`, but no controller named welcome exists. Time to fix that.
+So, now my specs still pass and cucumber fails as I expect it to. A handful of specs that don't make sense yet (the code for following someone) are unimplemented, and a handful of code about logging in fails. What is going on? Well, it turns out I've messed up my routes.rb file. I've told it to route root to `welcome#index`, but no controller named welcome exists. Time to fix that.
 
     rails g controller Welcome index
 
@@ -71,15 +71,15 @@ Another rails generator command and a bunch more cucumber scenarios pass. This h
 
 For now lets look at the next failure. This time we can't find the name field on the sign up form to input data into. So, without a name it should be impossible to create a user. If I run the rails server, and go plug in an email and a password it should fail as the user model requires a name, our spec tells us so right?
 
-Turns out I'd made a mistake there too. I'd written that particular test incorrectly, so it was giving a false pass. A quick re-write and check of my other tests and I now have a failing spec. So lets fix that before anything else. We need the user model to require the presense of the name field. So it's time to open up `app/models/user.rb` and write some code.
+Turns out I'd made a mistake there too. I'd written that particular test incorrectly, so it was giving a false pass. A quick re-write and check of my other tests and I now have a failing spec. So lets fix that before anything else. We need the user model to require the presence of the name field. So it's time to open up `app/models/user.rb` and write some code.
 
-We have three spec failures. Rejecting duplicate names, requiring a name, and rejecting a duplicate name given a different case. What we need is an ActiveRecord validation to assert these values of existance and uniqeness. After setting those in the model our spec passes again, this time actually correctly.
+We have three spec failures. Rejecting duplicate names, requiring a name, and rejecting a duplicate name given a different case. What we need is an ActiveRecord validation to assert these values of existence and uniqueness. After setting those in the model our spec passes again, this time actually correctly.
 
-Back to cucumber, we still have the problem of no name field on the signup form. Currently we're using devise's built in controller and view to render the user intraction code. It's time to modify that.
+Back to cucumber, we still have the problem of no name field on the signup form. Currently we're using devise's built in controller and view to render the user interaction code. It's time to modify that.
 
      rails g devise:views
 
-With that we now have all of the Devise views, ready to customise. In particular we're interested in the view "app/views/devise/registrations/new.html.erb". We can add the name field in here. We need to modify the controller too, to do that we add a filter in 'app/controllers/application_controller.rb', adding to the list of parameters that the uusers controller will pass though to the model.
+With that we now have all of the Devise views, ready to customise. In particular we're interested in the view "app/views/devise/registrations/new.html.erb". We can add the name field in here. We need to modify the controller too, to do that we add a filter in 'app/controllers/application_controller.rb', adding to the list of parameters that the users controller will pass though to the model.
 
 After adding a register and sign in button to the layout, that change to a sign out button when signed in, I can write the validations to detect if we are signed in or not. Then we've got everything we need to make accounts and sign in. Helpfully, cucumber agrees, the sign up feature passing completely.
 
@@ -89,7 +89,7 @@ By default, Devise does not support an indexing action to list all of the users,
 
    rails g controller Users index
 
-This will create the Users controller with the index action. Then we just update the action to assign a list of all users, the view to list all of their names, and the routes file to assign this to `/users/index`. The autogenerated rspec test (that validates the index action produces a result) is sufficant as there is a cucumber test for listing all users. Which starts passing with no extra changes, success.
+This will create the Users controller with the index action. Then we just update the action to assign a list of all users, the view to list all of their names, and the routes file to assign this to `/users/index`. The auto generated rspec test (that validates the index action produces a result) is sufficient as there is a cucumber test for listing all users. Which starts passing with no extra changes, success.
 
 Next we need the concept of a profile page, and specifically a show action. So we'll go to the spec for the user controller and test that we have a show action. This will obviously fail, so lets make the show action. All we need to do is check the params hash for the :id of the user and look that up in the User model. We'll redirect to the root of the app with a notice that we can't find the user if the model returns nil. Otherwise we'll pass the user object as @user down to the view, which we'll make. The view is dead simple and just exposes the name and nothing else. 
 
@@ -97,26 +97,26 @@ This makes the URL for a profile something like `/users/3`, we could have instea
 
 A few more edits to make. We'll add a link to my profile at the top of every page if you are logged in, this is a simple change to application.html.erb alongside the sign out link. We'll also edit the user index view to add a link to the profile of a user too.
 
-Now we have a profile page it's fine to finish writing the cucumber tests. I've also written the code to follow someone, not that I have a follow relation yet. RSpec passes everything, and cucumber passes all but 5 senarios. The scnarios about following and unfollowing someone.
+Now we have a profile page it's fine to finish writing the cucumber tests. I've also written the code to follow someone, not that I have a follow relation yet. RSpec passes everything, and cucumber passes all but 5 scenarios. The scenarios about following and unfollowing someone.
 
 We need our second model now, a follow model.
 
    rails g scaffold Follow from:referances to:referances
 
-I use a scaffold this time as I want a controller too, but I don't care about views so I'll delete those straight away along with their tests. I'll change the controler to expose only the :create and :delete actions, and restrict the routes so they are the only ones exposed. After updating the controller boilerplate spec to only test those two actions I run it only to find a lot of errors.
+I use a scaffold this time as I want a controller too, but I don't care about views so I'll delete those straight away along with their tests. I'll change the controller to expose only the :create and :delete actions, and restrict the routes so they are the only ones exposed. After updating the controller boilerplate spec to only test those two actions I run it only to find a lot of errors.
 
 As it turns out, using the references datatype will stick an "_id" on the end of the column name. Normally what I want, but not in this case. After writing a rename migration and applying that everything is fine. Spec is now passing. We have also added a test case for the follows model spec, that both fields exist.
 
 After a little more bugfixing we're at the state where almost all of the cucumber tests pass. The only thing left is the follow and unfollow links. It's at this point that I correct a lot of bugs in the follows model. This ends up changing the model so that it requires a user *object* to create the associations rather than just a user id. Now, I could adapt the follows controller to take in user ID's and do lookups, but it's becoming apparent that I don't really want a controller for it.
 
-A liberal application of the rm command later and I don't have a follows controler, or tests for it. I just add a follow action to the user controler, using Devise to require you be logged in to use it, and if you are getting your current user to be the follow-er. I also add an extra test for it to the spec for the users controller.
+A liberal application of the rm command later and I don't have a follows controller, or tests for it. I just add a follow action to the user controler, using Devise to require you be logged in to use it, and if you are getting your current user to be the follow-er. I also add an extra test for it to the spec for the users controller.
 
-The process from here is much as it has been before. Run the tests, see what doesn't pass, make it pass. After some fiddling with the User models to be able to correctly referance the followed and followers, all tests pass. One interesting part of this process was how to list users that I am not following. I thought about trying to construct some awful SQL mess to find this, but I realized that I could do it very esally. Get the list of all users, subtract the list of users who I'm following and the current user. Done.
+The process from here is much as it has been before. Run the tests, see what doesn't pass, make it pass. After some fiddling with the User models to be able to correctly reference the followed and followers, all tests pass. One interesting part of this process was how to list users that I am not following. I thought about trying to construct some awful SQL mess to find this, but I realised that I could do it very easily. Get the list of all users, subtract the list of users who I'm following and the current user. Done.
 
 However, during this development I noticed a number of additional bugs. Namely a user may follow themselves, and a user may follow another multiple times. From here I will write tests to expose these bugs and then try to fix them. The two bugs I found were a user being able to follow another multiple times, and a user being able to follow themselves. I decided that both of these things were undesired behaviour. I also decided that the validation to prevent this should be done at the model level.
 
-I wrote a test for both of these cases in my user Model and verified that they both failed. I decided to tackle the multiple follows first. Helpfully, the built-in model validations have a uniquness validation they can place on the model, along with a scope this allows ensuring that follows are unique. Another way of doing this, and a possibly more robust one, would be to enforce uniqness using a constraint on the database itself. This would be more robust as it would be resistant to multiple database connections from adding the same follow twice. However I have chosen not to do that in this instance as it is database implementation dependant. This test app is simply using SQLite with a single instance and database connection, so a model-level constraint is approprate. If deployed in production on a MySQL or PostgreSQL database I would likely refactor this uniqeness contraint to the database itself to ensure database integrity.
+I wrote a test for both of these cases in my user Model and verified that they both failed. I decided to tackle the multiple follows first. Helpfully, the built-in model validations have a uniqueness validation they can place on the model, along with a scope this allows ensuring that follows are unique. Another way of doing this, and a possibly more robust one, would be to enforce uniqueness using a constraint on the database itself. This would be more robust as it would be resistant to multiple database connections from adding the same follow twice. However I have chosen not to do that in this instance as it is database implementation dependant. This test app is simply using SQLite with a single instance and database connection, so a model-level constraint is appropriate. If deployed in production on a MySQL or PostgreSQL database I would likely refactor this uniqueness constraint to the database itself to ensure database integrity.
 
-A problem came during my implementation however. The follow model has two fields, a :from and a :to. Previously for ease of use I overrode the rails defaults to use :from and :to as the actual database column names rather than :from_id and :to_id. However, once I started trying to add validations using them I encountered problems. The base isuee was my code getting confused between when I meant the database column, which is an integer id, and an actual object of type User. In the end I reverted the migration and rewrote the code to use the default column names of :from_id and :to_id. It started working straight away.
+A problem came during my implementation however. The follow model has two fields, a :from and a :to. Previously for ease of use I overrode the rails defaults to use :from and :to as the actual database column names rather than :from_id and :to_id. However, once I started trying to add validations using them I encountered problems. The base issue was my code getting confused between when I meant the database column, which is an integer id, and an actual object of type User. In the end I reverted the migration and rewrote the code to use the default column names of :from_id and :to_id. It started working straight away.
 
 The second bug required a simple custom validator that does a simple comparison between the from and to fields of a Follow, setting an error if they are equal.
